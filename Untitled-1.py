@@ -1,53 +1,64 @@
-import email
 from posixpath import supports_unicode_filenames
 from typing_extensions import Self
 from unicodedata import name
+from faker import Faker
+fake = Faker(['th_TH', 'pl_PL'])
 
-data = ""
+from faker import Faker
 
-data_1 =""
-
-class  BaseContact:
-    
-    def __init__(self , name , surname , telephone_number , email ):
+class BaseContact:
+    def __init__(self , name, phone, email):
         self.name = name
-        self.surname = surname
-        self.telephone_number = telephone_number
+        self.phone = phone
         self.email = email
-    def __str__(self) -> str:
-        return f' Wizytówka prywatna Imie Nazwisko: {self.name} {self.surname}   number telefonu {self.telephone_number} , email {self.email} , długść imienia i nazwiska {len(self.name)+ len(self.surname)}'
-        
+
+    #property
+    def label_length(self):
+       print("długość imienia:  " + len(self.name))
+    self.label_length()     
   
-    def contact(self):
-            
-            print("Wybieram numer {self.telephone_number}  i dzwonię do {self.name} {self.surname}")                       
-    contact()
 
-
+    def contact(self): 
+       print(f'Wybieram numer +48 {self.phone} i dzwonię do {self.name}') 
+       print(f'Wizytówka prywatna {self.name} , +48{self.phone} , {self.email}')
     
-
+    self.contact()
 
 class BusinessContact(BaseContact):
-    def __init__(self  , company_position , company_name , company_number , *args, **kwargs):
-       super().__init__(*args, **kwargs)
+    def __init__(self, name, phone, email, company_position, company_name, company_number):
+       super().__init__(name, phone, email)
        self.company_position = company_position
        self.company_name = company_name
        self.company_number = company_number
        
-      
-    def contact_2(self):
-        print(f"Wybieram numer firmowy {self.company_number}  i dzwonię do {self.name} {self.surname}")  
-    contact_2()
+    def contact(self): 
+       print(f'Wybieram numer służbowy +48 {self.phone} i dzwonię do {self.company_number}')  
+       print(f'Wizytówka służbowa {self.company_position} , +48{self.company_number} , {self.company_name}')
+    self.contact()
+    
+def fake_contacts(is_business, amount):
+    fake = Faker(['th_TH', 'pl_PL'])
+    company_position = fake.job()
+    company_name = fake.company()
+    email = fake.email()
+    name = fake.name()
+    company_number = fake.msisdn()[3:]
+    telephone_number = fake.msisdn()[3:]
 
-    def __str__(self) -> str:
-        return f' Wizytówka słuzbowa Imie Nazwisko: {self.name} {self.surname}  stanowisko {self.company_position} nazwa firmy {self.company_name} number telefonu {self.company_number} długść imienia i nazwiska {len(self.name)+ len(self.surname)}'
+    lista_of_contacts = []
+    
+    for i in range(amount):
+        if is_business:
+          card = BusinessContact(name, telephone_number, email, company_number, company_position, company_name)
+        else:
+          card = BaseContact(name, telephone_number, email)
+        lista_of_contacts.append(card)
 
-data = BusinessContact( "Jan" , "Kowalski" , "Logistyk" , "Mac-Trans" , +48456128796  )
-data_1 = BaseContact("Jan" , "Kowalski" , +66123456779 , "email@gmail.com" )
-print(data_1)
-print(data)
+    return lista_of_contacts
 
 
 
+n = int(input('wpisz '))
 
-        
+fake_contacts(True, n) # biznesowe kontakty
+fake_contacts(False, n) # normalne kontakty
