@@ -37,8 +37,12 @@ def create_contacts(n, contact_type ):
          if contact_type == "priv":
                card = BaseContact( name = fake.name() , phone= fake.msisdn()[3:] , email= fake.email()) # tu trzeba skorzystać z fakera
                lista_of_contacts.append(card)
+               print(f'Wizytówka prywatna {card.name} , +48{card.phone} , {card.email}')
+               
          elif contact_type == "biz":
                cars = BusinessContact(company_position = fake.job() ,company_name = fake.company() , company_number = fake.msisdn()[3:] , name = fake.name() , phone= fake.msisdn()[3:] , email= fake.email() ) # tu dane generowane z fakera 
+               lista_of_contacts.append(cars)   
+               print(f'Wizytówka służbowa {cars.company_position} , +48{cars.phone} , {cars.company_name}')
     return lista_of_contacts  
 
 c = BaseContact( name = fake.name() , phone= fake.msisdn()[3:]  , email= fake.email() )
